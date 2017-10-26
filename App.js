@@ -1,13 +1,47 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Button } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import { purple, white, blue } from './utils/colors';
+import { FontAwesome} from '@expo/vector-icons'
+import { Constants } from 'expo';
+import AddDeck from './components/AddDeck';
+import Home from './components/Home';
+
+function MyStatusBar ({backgroundColor, ...props}) {
+  return (
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={purple} {...props} />
+    </View>
+  )
+}
+
+const Stack = StackNavigator({
+  Home: {
+    screen: Home,
+    navigationOptions:({navigation}) => ({
+      title: 'Mobile FlashCards',
+      headerRight:( 
+                    <TouchableOpacity style={{padding: 5}} onPress={() => navigation.navigate('AddDeck')}>
+                      <FontAwesome name='plus-circle' size={26} color={blue}/>
+                    </TouchableOpacity>
+                  )
+    })
+  },
+  AddDeck: {
+    screen: AddDeck,
+    navigationOptions:({navigation}) => ({
+      title: 'Add New Deck'
+    })
+  },
+})
 
 export default class App extends React.Component {
   render() {
+
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+      <View style={{flex: 1 }}>
+        <MyStatusBar backgroundColor={purple} barStyle="light-content" />
+        <Stack />
       </View>
     );
   }
@@ -16,7 +50,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
