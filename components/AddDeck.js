@@ -1,24 +1,35 @@
 import React, { Component } from 'react'
-import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, KeyboardAvoidingView} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, KeyboardAvoidingView, AsyncStorage} from 'react-native'
 import { black, purple, white } from '../utils/colors';
 import { saveDeckTitle, getDecks } from '../utils/api';
+import { MOBILE_FLASHCARD_DECK_STORAGE_KEY } from '../utils/_flashCards';
 import { NavigationActions } from 'react-navigation'
 
 class AddDeck extends React.Component {
 	state = {
-		deck: ''
+		deck: '',
+		response: ''
+	}
+
+	componentDidMount() {
+		//const decks = getDecks()
+		//alert(JSON.stringify(decks))
+
+		//AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
 	}
 
 	handleChangeDeck= (e) =>{
 		this.setState(()=>({deck: e.target.value}))
 	}
 
+
 	submit = () => {
 		saveDeckTitle(this.state.deck)
-		const decks = getDecks()
-		alert(JSON.stringify(decks))
+		//const decks = getDecks()
+		const value = AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY).done();
+		
 
-		//this.setState(() => ({ deck: '' }))
+		this.setState(() => ({ response: JSON.stringify(value) }))
 
 		//this.toHome();
 	}
@@ -38,10 +49,12 @@ class AddDeck extends React.Component {
 			        onChangeText={(text) => this.setState({deck: text})}
 			        value={this.state.deck}
 			      />
+			      <Text>{this.state.response}</Text>
 			    <TouchableOpacity 
 			     style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
 			     onPress={this.submit}
 			    >
+
 			        <Text style={styles.submitBtnText}>Submit</Text>
 			    </TouchableOpacity>
 			</KeyboardAvoidingView>
