@@ -12,8 +12,7 @@ class AddDeck extends React.Component {
 	}
 
 	componentDidMount() {
-		//const decks = getDecks()
-		//alert(JSON.stringify(decks))
+		
 
 		//AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
 	}
@@ -26,7 +25,7 @@ class AddDeck extends React.Component {
 	submit = () => {
 		saveDeckTitle(this.state.deck)
 		//const decks = getDecks()
-		const value = AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY).done();
+		const value = AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY);
 		
 
 		this.setState(() => ({ response: JSON.stringify(value) }))
@@ -39,7 +38,8 @@ class AddDeck extends React.Component {
 	  }
 
 	render() {
-		const {deck} = this.state
+		const {deck} = this.state.deck
+		const {response} = this.state.response
 		return (
 
 			<KeyboardAvoidingView behavior='padding' style={styles.container}>

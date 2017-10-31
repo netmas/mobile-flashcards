@@ -6,6 +6,33 @@ import { FontAwesome} from '@expo/vector-icons'
 import { Constants } from 'expo';
 import AddDeck from './components/AddDeck';
 import Home from './components/Home';
+import './ReactotronConfig'
+import { createStore, applyMiddleware, compose  } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk';
+import reducer from './reducers/'
+
+
+const logger = store => next => action => {
+  console.group(action.type)
+  console.info('dispatching', action)
+  let result = next(action)
+  console.log('next state', store.getState())
+  console.groupEnd(action.type)
+  return result
+}
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const store = createStore(
+  reducer,
+  composeEnhancers(
+    applyMiddleware(
+      logger, 
+      thunk
+    )
+  )
+)
 
 function MyStatusBar ({backgroundColor, ...props}) {
   return (
@@ -39,10 +66,12 @@ export default class App extends React.Component {
   render() {
 
     return (
-      <View style={{flex: 1 }}>
-        <MyStatusBar backgroundColor={purple} barStyle="light-content" />
-        <Stack />
-      </View>
+      <Provider store={store}>
+        <View style={{flex: 1 }}>
+          <MyStatusBar backgroundColor={purple} barStyle="light-content" />
+          <Stack />
+        </View>
+      </Provider>
     );
   }
 }

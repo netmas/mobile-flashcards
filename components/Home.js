@@ -2,42 +2,43 @@ import React, { Component } from 'react'
 import {View, StyleSheet, FlatList, AsyncStorage, Text } from 'react-native'
 import { black, purple, white } from '../utils/colors';
 import {getDecks} from '../utils/api';
+import Reactotron from 'reactotron-react-native';
+import { receiveDecks, addDeck } from '../actions'
+import { connect } from 'react-redux';
+
+function Deck ({title, questions}) {
+	return (
+		<View style={{flex:1}}>
+			<Text style={{fontSize:20}}>{title}</Text>
+		</View>
+	)
+}
 
 class Home extends React.Component {
 
-	state = {
-		data: ''
-	}
-
 	componentDidMount() {
-		//const decks = getDecks()
-		//this.setState({data: decks})
-		//AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
-		//alert(JSON.stringify(decks))
+		const { dispatch } = this.props
+		getDecks().then((decks) => this.props.receiveDecks(decks))
+		
+		/*
+		const decks = getDecks()
+		decks !== undefined && decks !== null?this.setState({data: decks}):this.setState({data: null })
+		*/
 	}
 
-	deck = ({title, questions}) => {
-		return (
-			<View style={{flex:1}}>
-				<Text>{title}</Text>
-			</View>
-		)
-	}
-
-	render() {
-
-		renderItem = ({item})=>{
-			return this.deck(...item)
+	renderItem = ({item})=>{
+			return <Deck {...item} />
 		}
+
+	render() {		
 
 		return (
 			<View style={styles.container}>
-			{/*}
-			    <FlatList 
+			    {/*<FlatList 
 			    	data = {this.state.data}
-			    	renderItem = {this.renderItem}
-			    />
-			*/}
+			    	renderItem={({item}) => <Text>{item.title}</Text>}
+			    />*/}
+				
 			 </View>
 		)
 	}
@@ -49,4 +50,22 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home
+
+function mapStateToProps ( state ) {
+  const { decks } = state
+  return {
+     decks
+  }
+}
+
+const mapDispatchToProps = {
+  receiveDecks,
+  addDeck
+}
+
+//export default Home
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Home)

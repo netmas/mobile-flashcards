@@ -1,21 +1,20 @@
 import { AsyncStorage } from 'react-native'
-import { MOBILE_FLASHCARD_DECK_STORAGE_KEY, formatDecksResults } from './_flashCards'
+import { MOBILE_FLASHCARD_DECK_STORAGE_KEY } from './_flashCards'
 
 export function getDecks () {
-  let value = AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY)
-
-  value === null && (
-
-  	AsyncStorage.setItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY, JSON.stringify({"my value":"hola"}))
-
-  )
 
   return AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY)
-  			//.then(formatDecksResults)
+  			.then((results) => {
+             results= JSON.parse(results)
+             return Object.values(results).map((deck)=>(
+                     {title: deck.title, questions:deck.question}
+                ))
+          })
 }
 
 export function saveDeckTitle (title) {
-  
+
+   
   return AsyncStorage.mergeItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY, JSON.stringify({
     [title]: {
     			title: title,
@@ -23,7 +22,5 @@ export function saveDeckTitle (title) {
     		 }
   }))
 
-  return AsyncStorage.mergeItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY, JSON.stringify({"my value":"hola"}))
-  
 }
 
