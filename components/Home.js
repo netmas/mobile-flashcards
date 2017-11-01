@@ -17,9 +17,9 @@ function Deck ({title, questions}) {
 class Home extends React.Component {
 
 	componentDidMount() {
-		const { dispatch } = this.props
+		//const { dispatch } = this.props
 		getDecks().then((decks) => this.props.receiveDecks(decks))
-		
+		console.log(this.props)
 		/*
 		const decks = getDecks()
 		decks !== undefined && decks !== null?this.setState({data: decks}):this.setState({data: null })
@@ -31,16 +31,19 @@ class Home extends React.Component {
 		}
 
 	render() {		
-
+		const { decks } = this.props
 		return (
+			console.log(this.props) || (
 			<View style={styles.container}>
-			    {/*<FlatList 
-			    	data = {this.state.data}
-			    	renderItem={({item}) => <Text>{item.title}</Text>}
-			    />*/}
+			    <FlatList
+		            data={[{ title: "My title" }, { title: "My other title" }]}
+		            renderItem={({ item }) => <Text>{item.title}</Text>}
+		            keyExtractor={item => item.title}
+		          />
 				
 			 </View>
 		)
+	 )
 	}
 }
 
