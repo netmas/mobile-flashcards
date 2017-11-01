@@ -32,11 +32,14 @@ class Home extends React.Component {
 
 	render() {		
 		const { decks } = this.props
+		const data = [{ title: "My title" }, { title: "My other title" }]
+		console.log(data)
+		console.log(decks)
 		return (
-			console.log(this.props) || (
+			console.log(data) || (
 			<View style={styles.container}>
 			    <FlatList
-		            data={[{ title: "My title" }, { title: "My other title" }]}
+		            data={data}
 		            renderItem={({ item }) => <Text>{item.title}</Text>}
 		            keyExtractor={item => item.title}
 		          />
@@ -56,8 +59,9 @@ const styles = StyleSheet.create({
 
 function mapStateToProps ( state ) {
   const { decks } = state
+  //console.log(state)
   return {
-     decks
+     decks: state
   }
 }
 

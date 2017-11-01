@@ -5,10 +5,13 @@ export function getDecks () {
 
   return AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY)
   			.then((results) => {
-             results= JSON.parse(results)
+            //alert(results)
+             results= JSON.parse(results)            
+             
              return Object.values(results).map((deck)=>(
                      {title: deck.title, questions:deck.question}
                 ))
+
           })
 }
 
