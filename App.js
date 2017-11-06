@@ -5,6 +5,8 @@ import { purple, white, blue } from './utils/colors';
 import { FontAwesome} from '@expo/vector-icons'
 import { Constants } from 'expo';
 import AddDeck from './components/AddDeck';
+import AddCard from './components/AddCard';
+import Deck from './components/Deck';
 import Home from './components/Home';
 import './ReactotronConfig'
 import { createStore, applyMiddleware, compose  } from 'redux'
@@ -58,6 +60,18 @@ const Stack = StackNavigator({
     screen: AddDeck,
     navigationOptions:({navigation}) => ({
       title: 'Add New Deck'
+    })
+  },
+  Deck: {
+    screen: Deck,
+    navigationOptions:({navigation}) => ({
+      title: 'Deck'
+    })
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions:({navigation}) => ({
+      title: 'Add New Card'
     })
   },
 })

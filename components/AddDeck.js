@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
 import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, KeyboardAvoidingView, AsyncStorage} from 'react-native'
-import { black, purple, white } from '../utils/colors';
+import { black, purple, white, red } from '../utils/colors';
 import { saveDeckTitle, getDecks } from '../utils/api';
 import { MOBILE_FLASHCARD_DECK_STORAGE_KEY } from '../utils/_flashCards';
 import { NavigationActions } from 'react-navigation'
+import { addDeck } from '../actions'
+import { connect } from 'react-redux';
 
 class AddDeck extends React.Component {
 	state = {
 		deck: '',
-		response: ''
+		response: '',
+		error: ''
 	}
 
 	componentDidMount() {
@@ -23,14 +26,26 @@ class AddDeck extends React.Component {
 
 
 	submit = () => {
-		saveDeckTitle(this.state.deck)
-		//const decks = getDecks()
-		const value = AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY);
+
+		let payload = 	{
+							title:this.state.deck, 
+							questions:undefined
+						}
+		let stateRedux = this.props.decks
+		let exists = Object.values(stateRedux).find(e => e.title === payload.title)
+		//console.log(stateRedux)
+		exists === undefined? (
+			this.setState(()=>({error: ''})),
+			this.props.addDeck(payload),
+			saveDeckTitle(this.state.deck),
+			//this.setState(() => ({ response: JSON.stringify(value) }))
+			this.toHome()
+		):(
+			this.setState(()=>({error: 'This Deck already exists'}))
+		)
 		
 
-		this.setState(() => ({ response: JSON.stringify(value) }))
-
-		//this.toHome();
+		
 	}
 
 	toHome = () => {
@@ -49,7 +64,6 @@ class AddDeck extends React.Component {
 			        onChangeText={(text) => this.setState({deck: text})}
 			        value={this.state.deck}
 			      />
-			      <Text>{this.state.response}</Text>
 			    <TouchableOpacity 
 			     style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
 			     onPress={this.submit}
@@ -57,6 +71,7 @@ class AddDeck extends React.Component {
 
 			        <Text style={styles.submitBtnText}>Submit</Text>
 			    </TouchableOpacity>
+			    <Text style={{color: red, fontSize: 22}}>{this.state.error}</Text>
 			</KeyboardAvoidingView>
 
 			)
@@ -99,4 +114,20 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddDeck
+function mapStateToProps ( state ) {
+  //const { decks } = state
+  //console.log(state)
+  return {
+     decks: state
+  }
+}
+
+const mapDispatchToProps = {
+  addDeck
+}
+
+//export default AddDeck
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddDeck)

@@ -3,16 +3,15 @@ import { RECEIVE_DECKS, ADD_DECK } from '../actions'
 function decks (state = {}, action) {
   switch (action.type) {
     case RECEIVE_DECKS :
-      //let aux = 'estoy aqui'
-      //console.log(aux, action.decks)
       return  {
         ...state,
         ...action.decks
       }
-    case ADD_DECK :
+    case ADD_DECK :   
+      const newIndex = Object.keys(state).length;
       return {
         ...state,
-        ...action.deck
+        [newIndex]: action.deck
       }
     default :
       return state

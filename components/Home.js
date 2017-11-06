@@ -1,49 +1,83 @@
 import React, { Component } from 'react'
-import {View, StyleSheet, FlatList, AsyncStorage, Text } from 'react-native'
+import {View, StyleSheet, FlatList, AsyncStorage, Text, ActivityIndicator } from 'react-native'
 import { black, purple, white } from '../utils/colors';
 import {getDecks} from '../utils/api';
 import Reactotron from 'reactotron-react-native';
-import { receiveDecks, addDeck } from '../actions'
+import { receiveDecks } from '../actions'
 import { connect } from 'react-redux';
-
-function Deck ({title, questions}) {
-	return (
-		<View style={{flex:1}}>
-			<Text style={{fontSize:20}}>{title}</Text>
-		</View>
-	)
-}
+import { List, ListItem } from "react-native-elements";
 
 class Home extends React.Component {
 
 	componentDidMount() {
 		//const { dispatch } = this.props
 		getDecks().then((decks) => this.props.receiveDecks(decks))
-		console.log(this.props)
+		//console.log(this.props)
 		/*
 		const decks = getDecks()
 		decks !== undefined && decks !== null?this.setState({data: decks}):this.setState({data: null })
 		*/
 	}
 
-	renderItem = ({item})=>{
-			return <Deck {...item} />
-		}
+	renderSeparator = () => {
+	    return (
+	      <View
+	        style={{
+	          height: 1,
+	          width: "86%",
+	          backgroundColor: "#CED0CE",
+	          marginLeft: "14%"
+	        }}
+	      />
+	    );
+	  };
+
+	renderFooter = () => {
+	    if (!this.state.loading) return null;
+
+	    return (
+	      <View
+	        style={{
+	          paddingVertical: 20,
+	          borderTopWidth: 1,
+	          borderColor: "#CED0CE"
+	        }}
+	      >
+	      </View>
+	    );
+	  };
 
 	render() {		
 		const { decks } = this.props
 		const data = [{ title: "My title" }, { title: "My other title" }]
-		console.log(data)
-		console.log(decks)
+		//const data=Object.values(this.props.decks)
+		//console.log(data)
+		//console.log(decks)
 		return (
 			console.log(data) || (
 			<View style={styles.container}>
+				<List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
 			    <FlatList
-		            data={data}
-		            renderItem={({ item }) => <Text>{item.title}</Text>}
+		            data={Object.values(decks)}
+		            renderItem={({ item }) => (
+			            <ListItem
+			              roundAvatar
+			              title={`${item.title}`}
+			              subtitle={item.questions===undefined?`0 Cards`:`${Object.keys(item.questions).length} Cards`}
+			              avatar={require('../images/deck-black.png')}
+			              containerStyle={{ borderBottomWidth: 0 }}
+			              onPress=	{() => {return this.props.navigation.navigate('Deck', {
+			              						title: item.title
+			              						})
+			          					  	}
+			          				}
+			            />
+			          )}
 		            keyExtractor={item => item.title}
+		            ItemSeparatorComponent={this.renderSeparator}
+
 		          />
-				
+				</List>
 			 </View>
 		)
 	 )
@@ -66,8 +100,7 @@ function mapStateToProps ( state ) {
 }
 
 const mapDispatchToProps = {
-  receiveDecks,
-  addDeck
+  receiveDecks
 }
 
 //export default Home
