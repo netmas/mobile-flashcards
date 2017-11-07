@@ -43,9 +43,6 @@ class AddDeck extends React.Component {
 		):(
 			this.setState(()=>({error: 'This Deck already exists'}))
 		)
-		
-
-		
 	}
 
 	toHome = () => {

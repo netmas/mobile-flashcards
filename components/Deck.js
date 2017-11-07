@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, AsyncStorage} from 'react-native'
 import { black, purple, white, gray } from '../utils/colors';
 import { connect } from 'react-redux';
-import {getDeck} from '../utils/api';
+
 
 class Deck extends React.Component {
   state = {
@@ -11,14 +11,15 @@ class Deck extends React.Component {
   }
 
   componentDidMount() {
-    const title = this.props.navigation.state.params.title
+    //const title = this.props.navigation.state.params.title
+    /*
     getDeck(title).then((deck) => {
-      console.log(deck[0].title),
-      this.setState(()=>({title:deck[0].title, questions:deck[0].questions})),
+      //console.log(deck[0].title),
+      this.setState(()=>({title:deck[0].title, questions:deck[0].questions}))
       //this.setState({...deck}),
-      console.log(this.state)
+      //console.log(this.props)
     })
-    
+    */
     //this.setState(()=>({deck: e.target.value}))
     
   }
@@ -29,15 +30,27 @@ class Deck extends React.Component {
                                 })
   }
 
+   StartQuiz = () => {
+    return this.props.navigation.navigate('Quiz', {
+                                title: this.props.navigation.state.params.title
+                                })
+  }
+
 	render() {	
+    const { decks } = this.props
+    //console.log(this.props)
+    const index = Object.values(decks).findIndex(item => item.title === this.props.navigation.state.params.title) 
+
+    const title =  Object.values(decks)[index].title === undefined?'':Object.values(decks)[index].title
+    const numQuestion = Object.values(decks)[index].questions.length=== undefined?0:Object.values(decks)[index].questions.length
 
 		return (
 			<View style={styles.container}>
 				<Text style={{fontSize: 46, marginBottom:5, alignSelf: 'center', justifyContent: 'center', alignItems: 'center'}}> 
-          {this.state.title}
+          {title}
         </Text>
         <Text style={{fontSize: 22, marginBottom:30, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', color:gray}}> 
-          {this.state.questions===undefined?`0 Cards`:`${Object.keys(this.state.questions).length} Cards`}
+          {numQuestion===undefined?`0 Cards`:`${numQuestion} Cards`}
         </Text>
         <TouchableOpacity 
            style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtnWhite}
@@ -105,7 +118,7 @@ function mapStateToProps ( state ) {
   const { decks } = state
   //console.log(state)
   return {
-     decks: state
+     decks: state.items
   }
 }
 
@@ -113,10 +126,9 @@ const mapDispatchToProps = {
   
 }
 
-/*
+
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  mapStateToProps
 )(Deck)
-*/
-export default Deck
+
+//export default Deck

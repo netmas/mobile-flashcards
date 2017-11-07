@@ -6,6 +6,7 @@ import { FontAwesome} from '@expo/vector-icons'
 import { Constants } from 'expo';
 import AddDeck from './components/AddDeck';
 import AddCard from './components/AddCard';
+import Quiz from './components/Quiz';
 import Deck from './components/Deck';
 import Home from './components/Home';
 import './ReactotronConfig'
@@ -72,6 +73,12 @@ const Stack = StackNavigator({
     screen: AddCard,
     navigationOptions:({navigation}) => ({
       title: 'Add New Card'
+    })
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions:({navigation}) => ({
+      title: 'Quiz'
     })
   },
 })

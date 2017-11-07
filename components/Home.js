@@ -57,6 +57,7 @@ class Home extends React.Component {
 			console.log(data) || (
 			<View style={styles.container}>
 				<List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+				{Object.values(decks).length>0?
 			    <FlatList
 		            data={Object.values(decks)}
 		            renderItem={({ item }) => (
@@ -77,6 +78,9 @@ class Home extends React.Component {
 		            ItemSeparatorComponent={this.renderSeparator}
 
 		          />
+		          :
+		          <Text>No data to display</Text>
+		      	}
 				</List>
 			 </View>
 		)
@@ -95,7 +99,7 @@ function mapStateToProps ( state ) {
   const { decks } = state
   //console.log(state)
   return {
-     decks: state
+     decks: state.items
   }
 }
 

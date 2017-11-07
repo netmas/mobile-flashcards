@@ -10,7 +10,7 @@ export function getDecks () {
              results= JSON.parse(results)            
              
              return Object.values(results).map((deck)=>(
-                     {title: deck.title, questions:deck.question}
+                     {title: deck.title, questions:deck.questions}
                 ))
 
           })
@@ -41,6 +41,21 @@ export function saveDeckTitle (title) {
     			questions:[]
     		 }
   }))
+
+}
+
+export function addCardToDeck (title, card) {
+
+   
+  return AsyncStorage.getItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY)
+    .then((results) => {
+      let data = JSON.parse(results)
+      let deck = data[title]
+      data[title]= {...deck, 
+                    questions: [...deck.questions, card]
+                  }
+      AsyncStorage.setItem(MOBILE_FLASHCARD_DECK_STORAGE_KEY, JSON.stringify(data))
+    })
 
 }
 
