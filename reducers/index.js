@@ -1,4 +1,4 @@
-import { RECEIVE_DECKS, ADD_DECK, ADD_CARD } from '../actions'
+import { RECEIVE_DECKS, ADD_DECK, ADD_CARD, START_QUIZ } from '../actions'
 
 function decks (state = { items:[],
                           selectedItem:[]}, action) {
@@ -29,6 +29,11 @@ function decks (state = { items:[],
       return {
         ...state,
         items: allDecks
+      }
+    case START_QUIZ :
+      return  {
+        ...state,
+        selectedItem:action.deck
       }
     default :
       return state

@@ -2,26 +2,19 @@ import React, { Component } from 'react'
 import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, AsyncStorage} from 'react-native'
 import { black, purple, white, gray } from '../utils/colors';
 import { connect } from 'react-redux';
+import { selectDeck } from '../actions'
 
 
 class Deck extends React.Component {
   state = {
-    title: '',
-    questions:[]
+    disabled: false
   }
 
   componentDidMount() {
-    //const title = this.props.navigation.state.params.title
-    /*
-    getDeck(title).then((deck) => {
-      //console.log(deck[0].title),
-      this.setState(()=>({title:deck[0].title, questions:deck[0].questions}))
-      //this.setState({...deck}),
-      //console.log(this.props)
-    })
-    */
-    //this.setState(()=>({deck: e.target.value}))
-    
+    const { decks } = this.props
+    let deck = Object.values(decks).find(item => item.title === this.props.navigation.state.params.title) 
+    deck.questions === undefined || deck.questions.length === 0?(this.setState({disabled:true})):(this.setState({disabled:false}))
+
   }
 
   AddNewCard = () => {
@@ -31,18 +24,30 @@ class Deck extends React.Component {
   }
 
    StartQuiz = () => {
+    const { decks } = this.props
+    let deck = Object.values(decks).find(item => item.title === this.props.navigation.state.params.title) 
+    
+    deck = {
+      total:deck.questions.length,
+      correct:0,
+      currentQuestion:0,
+      displayAnswer:false,
+      ...deck
+    }
+    this.props.selectDeck(deck)
+
     return this.props.navigation.navigate('Quiz', {
                                 title: this.props.navigation.state.params.title
-                                })
+                                })   
   }
 
 	render() {	
     const { decks } = this.props
     //console.log(this.props)
     const index = Object.values(decks).findIndex(item => item.title === this.props.navigation.state.params.title) 
-
     const title =  Object.values(decks)[index].title === undefined?'':Object.values(decks)[index].title
-    const numQuestion = Object.values(decks)[index].questions.length=== undefined?0:Object.values(decks)[index].questions.length
+    const numQuestion = Object.values(decks)[index].questions=== undefined?0:Object.values(decks)[index].questions.length
+
 
 		return (
 			<View style={styles.container}>
@@ -62,10 +67,12 @@ class Deck extends React.Component {
           <TouchableOpacity 
            style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
            onPress={this.StartQuiz}
+            disabled={this.state.disabled}
           >
 
               <Text style={styles.submitBtnText}>Start Quiz</Text>
           </TouchableOpacity>
+          {numQuestion === 0 && (<Text style={{color:black, textAlign: 'center'}}>Add Cards to take the quiz</Text>)}
 			</View>
 
 		)
@@ -123,12 +130,13 @@ function mapStateToProps ( state ) {
 }
 
 const mapDispatchToProps = {
-  
+  selectDeck
 }
 
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Deck)
 
 //export default Deck

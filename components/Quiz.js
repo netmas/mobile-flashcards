@@ -1,35 +1,110 @@
 import React, { Component } from 'react'
-import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, AsyncStorage} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, AsyncStorage, Animated} from 'react-native'
 import { black, purple, white, gray, red, green } from '../utils/colors';
 import { connect } from 'react-redux';
 
 class Quiz extends React.Component {
+  state = {
+    displayAnswer:false,
+    title: '',
+    total: 0,
+    correct: 0,
+    currentQuestion: 0,
+    questions: []
+  }
+
+  componentDidMount() {
+    
+    this.setState(this.props.selectedItem)
+    //AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
+  }
+
+  SeeAnswer = (e) => {
+    //console.log(this.state.title)
+    this.state.displayAnswer ===true?this.setState({...this.state, displayAnswer:false}):this.setState({...this.state, displayAnswer:true})
+  }
+
+  Correct = (e) => {
+    //let total = this.state.total
+    //let currenQuestion = this.state.currenQuestion
+    this.state.currentQuestion +1 >= this.state.total?(
+      this.setState((prevState, props)=> {
+          return {
+                    displayAnswer: false,
+                    correct: this.state.correct + 1,
+                    currentQuestion: this.state.currentQuestion +1
+                  }
+       }),
+      this.props.navigation.navigate('Results', {
+                                results: this.calculateResults(1)
+                                }) 
+     ):(
+       this.setState((prevState, props)=> {
+          return {
+                    displayAnswer: false,
+                    correct: this.state.correct + 1,
+                    currentQuestion: this.state.currentQuestion +1
+                  }
+       })
+     )
+  }
+
+  Incorrect = (e) => {
+    this.state.currentQuestion +1 >= this.state.total?(
+      this.props.navigation.navigate('Results', {
+                                results: this.calculateResults(0)
+                                }) 
+     ):(
+       this.setState((prevState, props)=> {
+          return {
+                    displayAnswer: false,
+                    currentQuestion: this.state.currentQuestion +1
+                  }
+       })
+     )
+  }
+
+  calculateResults = (num) => {
+    return {
+      total: this.state.total,
+      correct: this.state.correct + num,
+      percent: Math.round(((this.state.correct + num) * 100) / this.state.total)
+    }
+  }
+
+
 	render() {
+
+
 		return (
 			<View style={styles.container}>
-				<Text style={{fontSize: 15, alignSelf: 'flex-start'}}> 
-          				1/1
+				    <Text style={{fontSize: 15, alignSelf: 'flex-start'}}> 
+          				{this.state.currentQuestion + 1}/{this.state.total}
         		</Text>
 
-				<Text style={{fontSize: 30, marginTop:30, alignSelf: 'center', justifyContent: 'center', alignItems: 'center'}}> 
-          				MI PREGUNTA
+				    <Text style={{fontSize: 30, marginTop:30, alignSelf: 'center', justifyContent: 'center', alignItems: 'center'}}> 
+                  {this.state.questions.map((item, index)=>(
+                      this.state.currentQuestion === index &&(
+                        this.state.displayAnswer === false?item.question:item.answer
+                    )
+                   ))}
         		</Text>
 
         		<TouchableOpacity 
         			style={{marginBottom:80}}
-	           		onPress={this.AddNewCard}
+	           		onPress={this.SeeAnswer}
 	          	>
-	          		<Text style={styles.submitBtnTextRed}>Answer</Text>
+	          		<Text style={styles.submitBtnTextRed}>{this.state.displayAnswer ===true?'See Question':' See Answer'}</Text>
         		</TouchableOpacity>	
 	        	<TouchableOpacity 
 	           		style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtnGreen}
-	           		onPress={this.AddNewCard}
+	           		onPress={this.Correct}
 	          	>
 	            	<Text style={styles.submitBtnText}>Correct</Text>
 	          	</TouchableOpacity>
 	          	<TouchableOpacity 
 	           		style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtnRed}
-	           		onPress={this.StartQuiz}
+	           		onPress={this.Incorrect}
 	          	>
 	            	<Text style={styles.submitBtnText}>Incorrect</Text>
 	         	</TouchableOpacity>
@@ -97,4 +172,21 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Quiz
+function mapStateToProps ( state ) {
+  //const { selectedItem } = state
+  //console.log(state)
+  return {
+     selectedItem: state.selectedItem
+  }
+}
+
+const mapDispatchToProps = {
+  
+}
+
+
+export default connect(
+  mapStateToProps
+)(Quiz)
+
+//export default Quiz

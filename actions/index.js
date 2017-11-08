@@ -4,6 +4,8 @@ export const ADD_DECK = 'ADD_DECK'
 
 export const ADD_CARD = 'ADD_CARD'
 
+export const START_QUIZ = 'START_QUIZ'
+
 export function receiveDecks(decks) {
   return {
     type: RECEIVE_DECKS,
@@ -23,5 +25,12 @@ export function addCard(deck, card) {
     type: ADD_CARD,
     deck,
     card
+  }
+}
+
+export function selectDeck(deck) {
+  return {
+    type: START_QUIZ,
+    deck
   }
 }

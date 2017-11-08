@@ -9,11 +9,13 @@ import AddCard from './components/AddCard';
 import Quiz from './components/Quiz';
 import Deck from './components/Deck';
 import Home from './components/Home';
+import Results from './components/Results';
 import './ReactotronConfig'
 import { createStore, applyMiddleware, compose  } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
-import reducer from './reducers'
+import reducer from './reducers';
+import { setLocalNotification } from './utils/helpers';
 
 
 const logger = store => next => action => {
@@ -81,9 +83,20 @@ const Stack = StackNavigator({
       title: 'Quiz'
     })
   },
+  Results: {
+    screen: Results,
+    navigationOptions:({navigation}) => ({
+      title: 'Results'
+    })
+  }
 })
 
 export default class App extends React.Component {
+  
+  componentDidMount() {
+    setLocalNotification()
+  }
+
   render() {
 
     return (

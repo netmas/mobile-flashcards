@@ -16,7 +16,7 @@ class AddDeck extends React.Component {
 
 	componentDidMount() {
 		
-
+		
 		//AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
 	}
 
@@ -32,8 +32,9 @@ class AddDeck extends React.Component {
 							questions:undefined
 						}
 		let stateRedux = this.props.decks
-		let exists = Object.values(stateRedux).find(e => e.title === payload.title)
-		//console.log(stateRedux)
+		let exists = Object.values(stateRedux.items).find(e => e.title === payload.title)
+		
+		
 		exists === undefined? (
 			this.setState(()=>({error: ''})),
 			this.props.addDeck(payload),
@@ -50,8 +51,8 @@ class AddDeck extends React.Component {
 	  }
 
 	render() {
-		const {deck} = this.state.deck
-		const {response} = this.state.response
+		//const {deck} = this.state.deck
+		//const {response} = this.state.response
 		return (
 
 			<KeyboardAvoidingView behavior='padding' style={styles.container}>
