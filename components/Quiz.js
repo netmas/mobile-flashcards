@@ -65,10 +65,16 @@ class Quiz extends React.Component {
   }
 
   calculateResults = (num) => {
+    let total = this.state.total
+    let correct = this.state.correct + num
+    let percent = Math.round(((this.state.correct + num) * 100) / this.state.total)
+
+    this.setState({displayAnswer:false, currentQuestion:0, correct: 0})
+
     return {
-      total: this.state.total,
-      correct: this.state.correct + num,
-      percent: Math.round(((this.state.correct + num) * 100) / this.state.total)
+      total: total,
+      correct: correct,
+      percent: percent
     }
   }
 
@@ -180,9 +186,6 @@ function mapStateToProps ( state ) {
   }
 }
 
-const mapDispatchToProps = {
-  
-}
 
 
 export default connect(

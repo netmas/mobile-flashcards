@@ -27,26 +27,32 @@ class AddDeck extends React.Component {
 
 	submit = () => {
 
-		let payload = 	{
-							title:this.state.deck, 
-							questions:undefined
-						}
-		let stateRedux = this.props.decks
-		let exists = Object.values(stateRedux.items).find(e => e.title === payload.title)
-		
-		
-		exists === undefined? (
-			this.setState(()=>({error: ''})),
-			this.props.addDeck(payload),
-			saveDeckTitle(this.state.deck),
-			//this.setState(() => ({ response: JSON.stringify(value) }))
-			this.toHome()
-		):(
-			this.setState(()=>({error: 'This Deck already exists'}))
-		)
+		if ((this.state.deck !== '') && (this.state.deck !== null) && (this.state.deck !== undefined)){
+
+			let payload = 	{
+								title:this.state.deck, 
+								questions:undefined
+							}
+			let stateRedux = this.props.decks
+			let exists = Object.values(stateRedux.items).find(e => e.title === payload.title)
+			
+			
+			exists === undefined? (
+				this.setState(()=>({error: ''})),
+				this.props.addDeck(payload),
+				saveDeckTitle(this.state.deck),
+				//this.setState(() => ({ response: JSON.stringify(value) }))
+				this.toDeck()
+			):(
+				this.setState(()=>({error: 'This Deck already exists'}))
+			)
+	    }
+	    else{
+	    	this.setState(()=>({error: 'Title is required'}))
+	    }
 	}
 
-	toHome = () => {
+	toDeck = () => {
 	    this.props.navigation.dispatch(NavigationActions.back())
 	  }
 
@@ -69,7 +75,7 @@ class AddDeck extends React.Component {
 
 			        <Text style={styles.submitBtnText}>Submit</Text>
 			    </TouchableOpacity>
-			    <Text style={{color: red, fontSize: 22}}>{this.state.error}</Text>
+			    <Text style={{color: red, fontSize: 22, textAlign: 'center'}}>{this.state.error}</Text>
 			</KeyboardAvoidingView>
 
 			)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, AsyncStorage, KeyboardAvoidingView} from 'react-native'
-import { black, purple, white, gray } from '../utils/colors';
+import { black, purple, white, gray, red } from '../utils/colors';
 import { connect } from 'react-redux';
 import {addCardToDeck} from '../utils/api';
 import { addCard } from '../actions'
@@ -10,18 +10,31 @@ class AddCard extends React.Component {
 	state = {
 		deck: this.props.navigation.state.params.title,
 		question: '',
-		answer: ''
+		answer: '',
+		error: ''
 	}
 
 	submit = () => {
+
 		let deck =  this.state.deck
 		let card = 	{	
 						question:this.state.question, 
 						answer:this.state.answer
 					}
-		addCardToDeck(deck, card)
-		this.props.addCard(deck, card)
-		this.toPrevious()
+		if ((this.state.question !== '') && (this.state.question !== null) && (this.state.question !== undefined)){
+			if ((this.state.answer !== '') && (this.state.answer !== null) && (this.state.answer !== undefined)){
+				addCardToDeck(deck, card)
+				this.props.addCard(deck, card)
+				this.toPrevious()
+			}
+			else{
+				this.setState(()=>({error: 'Answer and Question are required'}))
+			}
+		}
+		else{
+			this.setState(()=>({error: 'Answer and Question are required'}))
+		}
+		
 	}
 
 	toPrevious = () => {
@@ -51,7 +64,7 @@ class AddCard extends React.Component {
 
 			        <Text style={styles.submitBtnText}>Submit</Text>
 			    </TouchableOpacity>
-
+			    <Text style={{color: red, fontSize: 22, textAlign: 'center'}}>{this.state.error}</Text>
 			</KeyboardAvoidingView>
 		)
 	}

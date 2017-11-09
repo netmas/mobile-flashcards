@@ -10,13 +10,7 @@ import { List, ListItem } from "react-native-elements";
 class Home extends React.Component {
 
 	componentDidMount() {
-		//const { dispatch } = this.props
 		getDecks().then((decks) => this.props.receiveDecks(decks))
-		//console.log(this.props)
-		/*
-		const decks = getDecks()
-		decks !== undefined && decks !== null?this.setState({data: decks}):this.setState({data: null })
-		*/
 	}
 
 	renderSeparator = () => {

@@ -1,4 +1,17 @@
+
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
+
+INSTALLING LOCALLY
+
+After downloading or cloning the repo from https://github.com/netmas/mobile-flashcards
+
+cd mobile-flashcards
+npm install
+npm start (if you prefer you can use yarn. The command would be: yarn start)
+
+You are all set to go!!
+
+From this point on the create-react-native-app readme continues...
 
 Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
 
