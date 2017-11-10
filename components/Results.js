@@ -51,31 +51,30 @@ class Results extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={{fontSize: 70, marginBottom:5, alignSelf: 'center', justifyContent: 'center', alignItems: 'center'}}> 
-		          {this.props.navigation.state.params.results.percent} %
-		        </Text>
-		        <Text style={{fontSize: 35, marginBottom:30, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', color:gray}}> 
+		      <Text style={{fontSize: 70, marginBottom:5, alignSelf: 'center', justifyContent: 'center', alignItems: 'center'}}> 
+              {this.props.navigation.state.params.results.percent} %
+          </Text>
+		      <Text style={{fontSize: 35, marginBottom:30, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', color:gray}}> 
 		          {this.props.navigation.state.params.results.correct}/{this.props.navigation.state.params.results.total}
-		        </Text>
-            <TouchableOpacity 
-               style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtn}
-               onPress={this.restartQuiz}
-              >
-                  <Text style={styles.submitBtnText}>Restart Quiz</Text>
-             </TouchableOpacity>
-             <TouchableOpacity 
-               style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtn}
-               onPress={this.toDeck}
-              >
-                  <Text style={styles.submitBtnText}>Back to Deck</Text>
-             </TouchableOpacity>
-		        <TouchableOpacity 
-		           style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtn}
-		           onPress={this.toHome}
-		          >
-		              <Text style={styles.submitBtnText}>To Home</Text>
-		         </TouchableOpacity>
-		          
+		      </Text>
+          <TouchableOpacity 
+            style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtn}
+            onPress={this.restartQuiz}
+          >
+              <Text style={styles.submitBtnText}>Restart Quiz</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtn}
+            onPress={this.toDeck}
+          >
+              <Text style={styles.submitBtnText}>Back to Deck</Text>
+          </TouchableOpacity>
+		      <TouchableOpacity 
+		        style={Platform.OS === 'ios' ?styles.iosSubmitBtn:styles.AndroidSubmitBtn}
+		        onPress={this.toHome}
+		      >
+		          <Text style={styles.submitBtnText}>To Home</Text>
+		      </TouchableOpacity>
 			</View>
 			)
 	}

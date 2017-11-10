@@ -11,9 +11,6 @@ class Deck extends React.Component {
   }
 
   componentDidMount() {
-    const { decks } = this.props
-    let deck = Object.values(decks).find(item => item.title === this.props.navigation.state.params.title) 
-    deck.questions === undefined || deck.questions.length === 0?(this.setState({disabled:true})):(this.setState({disabled:false}))
 
   }
 
@@ -67,7 +64,7 @@ class Deck extends React.Component {
           <TouchableOpacity 
            style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
            onPress={this.StartQuiz}
-            disabled={this.state.disabled}
+            disabled={numQuestion<=0?true:false}
           >
 
               <Text style={styles.submitBtnText}>Start Quiz</Text>

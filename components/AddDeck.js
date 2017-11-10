@@ -31,7 +31,7 @@ class AddDeck extends React.Component {
 
 			let payload = 	{
 								title:this.state.deck, 
-								questions:undefined
+								questions:[]
 							}
 			let stateRedux = this.props.decks
 			let exists = Object.values(stateRedux.items).find(e => e.title === payload.title)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, StyleSheet, FlatList, AsyncStorage, Text, ActivityIndicator } from 'react-native'
+import {View, StyleSheet, FlatList, AsyncStorage, Text, ActivityIndicator, TouchableHighlight } from 'react-native'
 import { black, purple, white } from '../utils/colors';
 import {getDecks} from '../utils/api';
 import Reactotron from 'reactotron-react-native';
@@ -58,8 +58,8 @@ class Home extends React.Component {
 			            <ListItem
 			              roundAvatar
 			              title={`${item.title}`}
-			              subtitle={item.questions===undefined?`0 Cards`:`${Object.keys(item.questions).length} Cards`}
-			              avatar={require('../images/deck-black.png')}
+			              subtitle={`${Object.keys(item.questions).length} Cards`}
+			              avatar={Object.keys(item.questions).length <= 0?require('../images/deck-black.png'):require('../images/deck-blue.png')}
 			              containerStyle={{ borderBottomWidth: 0 }}
 			              onPress=	{() => {return this.props.navigation.navigate('Deck', {
 			              						title: item.title
