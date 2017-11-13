@@ -52,9 +52,19 @@ class AddDeck extends React.Component {
 	    }
 	}
 
-	toDeck = () => {
-	    this.props.navigation.dispatch(NavigationActions.back())
-	  }
+	toDeck = (e) => {
+      return this.props
+               .navigation
+               .dispatch(NavigationActions.reset(
+                 {
+                    index: 1,
+                    actions: [
+                      NavigationActions.navigate({ routeName: 'Home'}),
+                      NavigationActions.navigate({ routeName: 'Deck', params: {title: this.state.deck}})
+                    ]
+                  }));
+
+   }
 
 	render() {
 		//const {deck} = this.state.deck

@@ -17,7 +17,7 @@ import thunk from 'redux-thunk';
 import reducer from './reducers';
 import { setLocalNotification } from './utils/helpers';
 
-
+/* I'll leave it here to be able to quickly use it if I need it
 const logger = store => next => action => {
   console.group(action.type)
   console.info('dispatching', action)
@@ -25,7 +25,7 @@ const logger = store => next => action => {
   console.log('next state', store.getState())
   console.groupEnd(action.type)
   return result
-}
+}*/
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -33,7 +33,7 @@ const store = createStore(
   reducer,
   composeEnhancers(
     applyMiddleware(
-      logger, 
+      //logger, 
       thunk
     )
   )
